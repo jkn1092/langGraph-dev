@@ -1,0 +1,35 @@
+name: 🕵️‍♂️ Ugokin AI Code Audit
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installation des dépendances
+        run: npm install
+
+      - name: Lancement de l'Agent LangGraph
+        env:
+          # On donne les clés à la machine
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: |
+          # 1. On récupère le vrai diff de la PR grâce à l'outil GitHub
+          DIFF_CONTENT=$(gh pr diff ${{ github.event.pull_request.number }})
+          
+          # 2. On injecte le diff dans ton script et on le lance !
+          PR_DIFF="$DIFF_CONTENT" npx tsx audit.ts > audit_result.txt
+          
+          # 3. On affiche le résultat dans les logs de GitHub
+          cat audit_result.txt
