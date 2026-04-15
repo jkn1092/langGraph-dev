@@ -136,10 +136,21 @@ workflow.addEdge("fix", "review");
 
 export const auditApp = workflow.compile();
 
-async function run() {
-    const prDiff = `fn add(a: i32, b: i32) -> i32 { a + b }`;
+const FALLBACK_PR_DIFF = `fn add(a: i32, b: i32) -> i32 { a + b }`;
 
-    console.log("🔍 Audit CI — PR simulée (Rust sans tests)\n");
+async function run() {
+    const fromEnv = (process.env.PR_DIFF ?? "").trim();
+    const useEnv = fromEnv.length > 0;
+
+    console.log(
+        useEnv
+            ? "▶ Mode : CI/CD (Variable d'environnement)"
+            : "▶ Mode : Local (Fallback)",
+    );
+
+    const prDiff = useEnv ? fromEnv : FALLBACK_PR_DIFF;
+
+    console.log("🔍 Audit CI — lancement du graphe\n");
 
     const finalState = await auditApp.invoke({
         prDiff,
