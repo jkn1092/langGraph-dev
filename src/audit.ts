@@ -134,7 +134,8 @@ workflow.addConditionalEdges(
 
 workflow.addEdge("fix", "review");
 
-export const auditApp = ;
+export const auditApp = workflow.compile();
+console.log(auditApp);
 
 const FALLBACK_PR_DIFF = `fn add(a: i32, b: i32) -> i32 { a + b }`;
 
