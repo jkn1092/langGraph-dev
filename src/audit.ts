@@ -97,14 +97,14 @@ Règles strictes :
         typeof content === "string"
             ? content
             : Array.isArray(content)
-              ? content
+                ? content
                     .map((b) =>
                         typeof b === "object" && b !== null && "text" in b
                             ? String((b as { text: string }).text)
                             : "",
                     )
                     .join("")
-              : String(content ?? "");
+                : String(content ?? "");
 
     const fixedCode = raw
         .replace(/^```(?:rust)?\s*\n?/i, "")
@@ -135,6 +135,7 @@ workflow.addConditionalEdges(
 workflow.addEdge("fix", "review");
 
 export const auditApp = workflow.compile();
+console.log(auditApp);
 
 const FALLBACK_PR_DIFF = `fn add(a: i32, b: i32) -> i32 { a + b }`;
 
