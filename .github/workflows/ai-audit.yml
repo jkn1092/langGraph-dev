@@ -7,6 +7,9 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
@@ -32,4 +35,4 @@ jobs:
           PR_DIFF="$DIFF_CONTENT" npx tsx audit.ts > audit_result.txt
           
           # 3. On affiche le résultat dans les logs de GitHub
-          cat audit_result.txt
+          gh pr comment ${{ github.event.pull_request.number }} --body-file audit_result.txt
