@@ -32,7 +32,7 @@ jobs:
           DIFF_CONTENT=$(gh pr diff ${{ github.event.pull_request.number }})
           
           # 2. On injecte le diff dans ton script et on le lance !
-          PR_DIFF="$DIFF_CONTENT" npx tsx audit.ts > audit_result.txt
+          PR_DIFF="$DIFF_CONTENT" npx tsx src/audit.ts > audit_result.txt
           
           # 3. On affiche le résultat dans les logs de GitHub
           gh pr comment ${{ github.event.pull_request.number }} --body-file audit_result.txt
