@@ -97,14 +97,14 @@ Règles strictes :
         typeof content === "string"
             ? content
             : Array.isArray(content)
-              ? content
+                ? content
                     .map((b) =>
                         typeof b === "object" && b !== null && "text" in b
                             ? String((b as { text: string }).text)
                             : "",
                     )
                     .join("")
-              : String(content ?? "");
+                : String(content ?? "");
 
     const fixedCode = raw
         .replace(/^```(?:rust)?\s*\n?/i, "")
